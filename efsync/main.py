@@ -39,7 +39,7 @@ def get_args(config_file):
         raise(e)
 
 
-def efsync(input_args=None, config_file=None):
+def efsync(args):
     try:
         start = time.time()
         logger.info('starting....')
@@ -50,9 +50,9 @@ def efsync(input_args=None, config_file=None):
             logger.info(f'loading config from {input_args["config_file"]}')
             args = get_args(input_args['config_file'])
             logger.info('loaded config')
-        elif config_file:
-            logger.info(f'loading config from {input_args["config_file"]}')
-            args = get_args(config_file)
+        elif isinstance(args,str):
+            logger.info(f'loading config from {args}')
+            args = get_args(args)
             logger.info('loaded config')
         else:
             logger.info(f'using CLI parameters')

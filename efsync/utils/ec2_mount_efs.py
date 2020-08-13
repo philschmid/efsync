@@ -5,7 +5,7 @@ from efsync.utils.helper.createSSHClient import createSSHClient
 
 def write_to_log(file_string):
     try:
-        with open(f'.efsync/logs', 'w') as out_file:
+        with open(f'./logs', 'w') as out_file:
             for entry in file_string:
                 out_file.write(entry.decode("utf-8"))
                 out_file.write('\n')

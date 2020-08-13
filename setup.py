@@ -7,7 +7,7 @@ print(find_packages())
 
 setup(
     name='efsync',
-    version='0.1.1',
+    version='0.1.2',
     packages=find_packages(),
     entry_points={
         "console_scripts": ["efsync=efsync.efsync_cli:main"]
