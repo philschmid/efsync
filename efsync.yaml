@@ -1,0 +1,15 @@
+#efsync configuration
+# lambda ci python version for pip installation
+python_version: 3.8
+# pip directory
+efs_pip_dir: lib
+# extra directory for file upload like ML models
+dir: dir
+requirements: "requirements.txt"
+# aws profile configuration
+aws_profile: schueler
+aws_region: eu-central-1
+
+#aws vpc and ec2 shit
+subnet_Id: subnet-17f97a7d
+ec2_key_name: test-script-asd913fjgq3

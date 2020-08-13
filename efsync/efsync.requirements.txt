@@ -1,0 +1,4 @@
+scp
+paramiko
+boto3
+pyaml

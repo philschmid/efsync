@@ -1,0 +1,50 @@
+from argparse import ArgumentParser
+# from efsync.main import efsync
+
+
+def main():
+    # Initiate the parser with a description
+    parser = ArgumentParser(
+        "efsync CLI tool. More Information read https://github.com/", usage="efsync <command> [<args>]")
+    parser.add_argument("--version", "-v",
+                        help="show program version", action="store_true")
+
+    parser.add_argument("--requirements", "-r",
+                        help="path of your requirements.txt", default="requirements.txt")
+    # optional
+    parser.add_argument(
+        "--config_file", "-cf", help="path of your efsync.yaml")
+
+    parser.add_argument("--python_version", "-py",
+                        help="Python version used to install dependencies",
+                        default=3.8)
+
+    parser.add_argument("--efs_pip_dir", "-epd",
+                        help="directory where the pip packages will be installed on efs",
+                        default='lib')
+
+    parser.add_argument("--file_dir", "-fd",
+                        help="directory where all other files will be placed",
+                        default='tmp')
+
+    parser.add_argument("--aws_profile", "-ap",
+                        help="name of the used AWS profile",
+                        default='efsync')
+
+    parser.add_argument("--aws_region", "-ar",
+                        help="aws region where the efs is running",
+                        default='eu-central-1')
+
+    parser.add_argument("--subnet_Id", "-sbd",
+                        help="subnet id of the efs ")
+
+    parser.add_argument("--ec2_key_name", "-ekn",
+                        help="temporary key name for the ec2 instance")
+
+    args = parser.parse_args()
+    print(vars(args))
+    # efsync(vars(args))
+
+
+if __name__ == "__main__":
+    main()
