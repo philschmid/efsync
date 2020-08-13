@@ -1,9 +1,11 @@
 import logging
 import sys
 from logging.handlers import TimedRotatingFileHandler
+
 FORMATTER = formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(message)s')
-LOG_FILE = ".efsync/logs"
+
+LOG_FILE = "./logs"
 
 
 def get_console_handler():
