@@ -2,6 +2,9 @@ badges:
 
 [![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) downloads
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing
+]
+
 colab with example
 
 # Documentation
@@ -14,6 +17,9 @@ colab with example
 - [CLI](#cli)
 
 ## <a name="quick-start"></a>Quick Start
+
+Example in Google Colab. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing
+]
 
 1. **Install via pip3**
 

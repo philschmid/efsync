@@ -39,21 +39,25 @@ def get_args(config_file):
         raise(e)
 
 
-def efsync(args):
+def efsync(input_args):
     try:
         start = time.time()
         logger.info('starting....')
         #
         # parse args
         #
-        if 'config_file' in input_args and os.path.isfile(input_args['config_file']):
+        # efsync -cf efsync.yaml
+        if  isinstance(input_args,dict) and 'config_file' in input_args and os.path.isfile(input_args['config_file']):
             logger.info(f'loading config from {input_args["config_file"]}')
             args = get_args(input_args['config_file'])
             logger.info('loaded config')
-        elif isinstance(args,str):
-            logger.info(f'loading config from {args}')
-            args = get_args(args)
+        # from efsync import efsync
+        # efsync('efsync.yaml')
+        elif isinstance(input_args,str):
+            logger.info(f'loading config from {input_args}')
+            args = get_args(input_args)
             logger.info('loaded config')
+        # efsync ........
         else:
             logger.info(f'using CLI parameters')
             args = get_boto3_client(input_args)
