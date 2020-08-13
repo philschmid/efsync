@@ -55,7 +55,7 @@ python_version: 3.8
 # pip directory
 efs_pip_dir: lib
 # extra directory for file upload like ML models
-dir: dir
+file_dir: dir
 # requirements file
 requirements: requirements.txt
 # aws profile configuration
