@@ -125,7 +125,7 @@ def efsync(input_args):
             logger.info('copied pip packages')
         if 'file_dir' in args:
             logger.info(f"coping files from {args['file_dir']} to ec2")
-            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['file_idr'], ec2_key_name=args['ec2_key_name']
+            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['file_dir'], ec2_key_name=args['ec2_key_name']
                               )
             logger.info(f"copied files from {args['file_dir']}")
         #
