@@ -22,8 +22,3 @@ def copy_files_to_ec2(bt3=None, instance_id='', mv_dir='', ec2_dir='/home/ec2-us
         scp.close()
         ssh.close()
         return True
-
-
-# scp - i .efsync/test-script-asd913fjgq3.pem .efsync/lib/six.py ec2-user@ec2-18-158-59-205.eu-central-1.compute.amazonaws.com: / home/ec2-user/efs
-
-# ssh - i ".efsync/test-script-asd913fjgq3.pem" ec2-user@ec2-18-158-59-205.eu-central-1.compute.amazonaws.com

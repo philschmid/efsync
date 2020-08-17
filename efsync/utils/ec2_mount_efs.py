@@ -4,14 +4,14 @@ from efsync.utils.helper.createSSHClient import createSSHClient
 
 
 
-def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None):
+def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None,ec2_key_name=None):
     try:
         client = bt3.client('ec2')
         response = client.describe_instances(InstanceIds=[instance_id])
         # get public dns
         public_dns_name = response['Reservations'][0]['Instances'][0]['NetworkInterfaces'][0]['Association']['PublicDnsName']
         # connect ssh
-        ssh = createSSHClient(public_dns_name=public_dns_name)
+        ssh = createSSHClient(public_dns_name=public_dns_name,ec2_key_name= ec2_key_name)
         # install efs mount helper
         stdin, stdout, stderr = ssh.exec_command(
             'sudo yum install -y amazon-efs-utils')
