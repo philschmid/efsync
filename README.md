@@ -1,14 +1,12 @@
-badges:
+# efsync
 
-[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) downloads
+[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![publish efsync to pypi](https://github.com/philschmid/efsync/workflows/publish%20efsync%20to%20pypi/badge.svg)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing)
-
-![publish efsync to pypi](https://github.com/philschmid/efsync/workflows/publish%20efsync%20to%20pypi/badge.svg)
+efsync is an CLI tool/ sdk to automatically upload files and dependencies to AWS EFS. The CLIT is easy to use, you only need access to an AWS Account and an AWS EFS-filesystem up and running. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start).
 
 # Documentation
 
-<img align="right" width="400" src="./cli.png" />
+<img align="right" width="600" src="./cli.png" />
 
 - [Quick Start](#quick-start)
 - [Examples](#examples)
