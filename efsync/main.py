@@ -81,10 +81,11 @@ def efsync(input_args):
         logger.info(f"creating security group")
         try:
             security_id = create_secruity_group(args['bt3'])
+            logger.info(f'created security group {security_id}') 
         except Exception as e:
             logger.info(f"security group creation failed, already exists")
             security_id = get_security_group_id(args['bt3'])
-        logger.info(f'created security group {security_id}')
+            logger.info(f'using existing security group {security_id}')
         #
         # creates ssh key for scp and ssh in .efsync
         #

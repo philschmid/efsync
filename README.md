@@ -1,6 +1,6 @@
 # efsync
 
-[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![publish efsync to pypi](https://github.com/philschmid/efsync/workflows/publish%20efsync%20to%20pypi/badge.svg)
+[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![pypi package deployment](https://github.com/philschmid/efsync/workflows/pypi%20package%20deployment/badge.svg)
 
 efsync is an CLI tool/ sdk to automatically upload files and dependencies to AWS EFS. The CLI is easy to use, you only need access to an AWS Account, an AWS EFS-filesystem up and running, and Docker installed. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start).
 
