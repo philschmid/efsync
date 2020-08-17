@@ -109,7 +109,7 @@ def efsync(input_args):
         # mounts efs file system with instance id
         #
         logger.info(f'mount efs file system with instance {instance_id}')
-        mount_efs(args['bt3'], instance_id)
+        mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'], clean_efs=args['clean_efs'])
         logger.info('mounted efs')
         #
         # copy all files with scp from local directory to ec2 mounted efs

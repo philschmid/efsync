@@ -6,10 +6,12 @@ efs_pip_dir: lib
 # extra directory for file upload like ML models
 file_dir: dir
 requirements: "requirements.txt"
+clean_efs: True
 # aws profile configuration
 aws_profile: schueler
 aws_region: eu-central-1
 
 #aws vpc and ec2 shit
 subnet_Id: subnet-17f97a7d
+efs_filesystem_id: fs-23sdf121
 ec2_key_name: test-script-asd913fjgq3

@@ -23,6 +23,13 @@ def main():
                         help="directory where the pip packages will be installed on efs",
                         default='lib')
 
+    parser.add_argument("--efs_filesystem_id", "-efi",
+                        help="File System ID from the EFS filesystem",
+                        )
+    parser.add_argument("--clean_efs", "-ce",
+                        help="Defines if the efs should be cleaned up before uploading",
+                        default=True)
+
     parser.add_argument("--file_dir", "-fd",
                         help="directory where all other files will be placed",
                         default='tmp')
