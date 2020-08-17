@@ -1,11 +1,13 @@
 import boto3
 from uuid import uuid4
+import os
 
 
 def write_key_to_file(file_string=None, file_path='.efsync', key_name=''):
     try:
         with open(f'{file_path}/{key_name}.pem', 'w') as out_file:
             out_file.write(file_string)
+        os.chmod(f'{file_path}/{key_name}.pem' , 0400)
     except Exception as e:
         print(e)
         raise(e)
