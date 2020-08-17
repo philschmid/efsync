@@ -1,14 +1,12 @@
-badges:
+# efsync
 
-[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) downloads
+[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![publish efsync to pypi](https://github.com/philschmid/efsync/workflows/publish%20efsync%20to%20pypi/badge.svg)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing)
-
-![publish efsync to pypi](https://github.com/philschmid/efsync/workflows/publish%20efsync%20to%20pypi/badge.svg)
+efsync is an CLI tool/ sdk to automatically upload files and dependencies to AWS EFS. The CLIT is easy to use, you only need access to an AWS Account and an AWS EFS-filesystem up and running. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start).
 
 # Documentation
 
-<img align="right" width="400" src="./cli.png" />
+<img align="right" width="600" src="./cli.png" />
 
 - [Quick Start](#quick-start)
 - [Examples](#examples)
@@ -46,7 +44,7 @@ efsync -cf efsync.yaml
 **sync your pip packages or files to AWS EFS**
 
 ```bash
-efsync -r requirements.txt -py 3.8 -epd lib -fd tmp -ap schueler -ar eu-central-1 -sbd <subnet_id> -ekn <ec2-key-name>
+efsync -r requirements.txt -py 3.8 -epd lib -fd tmp -ap schueler -ar eu-central-1 -sbd <subnet_id> -ekn <ec2-key-name>  -efi  <efs_filesystem_id>
 ```
 
 ## SDK Example with `efsync.yaml`
@@ -62,11 +60,14 @@ efs_pip_dir: lib
 file_dir: dir
 # requirements file
 requirements: requirements.txt
+# Defines if the efs should be cleaned up before uploading
+clean_efs: True
 # aws profile configuration
 aws_profile: efsync
 aws_region: eu-central-1
 
 #aws vpc and ec2 shit
+efs_filesystem_id: fs-2adfas123
 subnet_Id: subnet-xxx
 ec2_key_name: efsync-asd913fjgq3
 ```
@@ -81,15 +82,17 @@ efsync('efsync.yaml')
 
 ## <a name="cli"></a>CLI
 
-| cli_short | cli_long         | default          | description                                               |
-| --------- | ---------------- | ---------------- | --------------------------------------------------------- |
-| -h        | --help           | -                | displays all commands                                     |
-| -r        | --requirements   | requirements.txt | path of your requirements.txt                             |
-| -cf       | --config_file    | -                | path of your efsync.yaml                                  |
-| -py       | --python_version | 3.8              | Python version used to install dependencies               |
-| -epd      | --efs_pip_dir    | lib              | directory where the pip packages will be installed on efs |
-| -fd       | --file_dir       | tmp              | directory where all other files will be placed            |
-| -ap       | --aws_profile    | efsync           | name of the used AWS profile                              |
-| -ar       | --aws_region     | eu-central-1     | aws region where the efs is running                       |
-| -sbd      | --subnet_Id      | -                | subnet id of the efs                                      |
-| -ekn      | --ec2_key_name   | -                | temporary key name for the ec2 instance                   |
+| cli_short | cli_long            | default          | description                                               |
+| --------- | ------------------- | ---------------- | --------------------------------------------------------- |
+| -h        | --help              | -                | displays all commands                                     |
+| -r        | --requirements      | requirements.txt | path of your requirements.txt                             |
+| -cf       | --config_file       | -                | path of your efsync.yaml                                  |
+| -py       | --python_version    | 3.8              | Python version used to install dependencies               |
+| -epd      | --efs_pip_dir       | lib              | directory where the pip packages will be installed on efs |
+| -efi      | --efs_filesystem_id | -                | File System ID from the EFS filesystem                    |
+| -ce       | --clean_efs         | True             | Defines if the EFS should be cleaned up before uploading  |
+| -fd       | --file_dir          | tmp              | directory where all other files will be placed            |
+| -ap       | --aws_profile       | efsync           | name of the used AWS profile                              |
+| -ar       | --aws_region        | eu-central-1     | aws region where the efs is running                       |
+| -sbd      | --subnet_Id         | -                | subnet id of the efs                                      |
+| -ekn      | --ec2_key_name      | -                | temporary key name for the ec2 instance                   |

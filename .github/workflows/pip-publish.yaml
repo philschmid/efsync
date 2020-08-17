@@ -1,4 +1,4 @@
-name: publish efsync to pypi
+name: pypi package deployment
 
 on:
   push:
