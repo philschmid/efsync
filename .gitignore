@@ -142,3 +142,4 @@ requirements.txt
 
 examples/*.yaml
 examples/logs
+.vscode
