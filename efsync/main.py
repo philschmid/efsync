@@ -70,7 +70,7 @@ def efsync(input_args):
         #
         # install pip requirements
         #
-        if 'requirements' in args:
+        if 'requirements' in args and 'efs_pip_dir' in args:
             logger.info(f"installing pip packages to {args['efs_pip_dir']}")
             pip_install_requirements(
                 python_version=args['python_version'], pip_dir=args['efs_pip_dir'])
@@ -110,21 +110,23 @@ def efsync(input_args):
         # mounts efs file system with instance id
         #
         logger.info(f'mount efs file system with instance {instance_id}')
-        logger.info(f'sleeping 90 seconds')
-        time.sleep(90)
+        logger.info(f'sleeping 30 seconds.... wait ec2 is up completely')
+        time.sleep(30)
         mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'],
                   clean_efs=args['clean_efs'], ec2_key_name=args['ec2_key_name'], logger=logger)
         logger.info('mounted efs')
         #
         # copy all files with scp from local directory to ec2 mounted efs
         #
-        if 'requirements' in args:
+        if 'requirements' in args and 'efs_pip_dir' in args:
             logger.info('coping pip packages with scp to ec2 instance')
-            copy_files_to_ec2(args['bt3'], instance_id, args['requirements'])
+            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['efs_pip_dir'], ec2_key_name=args['ec2_key_name']
+                              )
             logger.info('copied pip packages')
         if 'file_dir' in args:
             logger.info(f"coping files from {args['file_dir']} to ec2")
-            copy_files_to_ec2(args['bt3'], instance_id, args['file_dir'])
+            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['file_idr'], ec2_key_name=args['ec2_key_name']
+                              )
             logger.info(f"copied files from {args['file_dir']}")
         #
         # stops ec2 instance after file transfer
