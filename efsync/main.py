@@ -47,13 +47,13 @@ def efsync(input_args):
         # parse args
         #
         # efsync -cf efsync.yaml
-        if  isinstance(input_args,dict) and 'config_file' in input_args and os.path.isfile(input_args['config_file']):
+        if isinstance(input_args, dict) and 'config_file' in input_args and os.path.isfile(input_args['config_file']):
             logger.info(f'loading config from {input_args["config_file"]}')
             args = get_args(input_args['config_file'])
             logger.info('loaded config')
         # from efsync import efsync
         # efsync('efsync.yaml')
-        elif isinstance(input_args,str):
+        elif isinstance(input_args, str):
             logger.info(f'loading config from {input_args}')
             args = get_args(input_args)
             logger.info('loaded config')
@@ -81,7 +81,7 @@ def efsync(input_args):
         logger.info(f"creating security group")
         try:
             security_id = create_secruity_group(args['bt3'])
-            logger.info(f'created security group {security_id}') 
+            logger.info(f'created security group {security_id}')
         except Exception as e:
             logger.info(f"security group creation failed, already exists")
             security_id = get_security_group_id(args['bt3'])
@@ -110,7 +110,10 @@ def efsync(input_args):
         # mounts efs file system with instance id
         #
         logger.info(f'mount efs file system with instance {instance_id}')
-        mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'], clean_efs=args['clean_efs'],ec2_key_name=args['ec2_key_name'])
+        logger.info(f'sleeping 90 seconds')
+        time.sleep(90)
+        mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'],
+                  clean_efs=args['clean_efs'], ec2_key_name=args['ec2_key_name'], logger=logger)
         logger.info('mounted efs')
         #
         # copy all files with scp from local directory to ec2 mounted efs

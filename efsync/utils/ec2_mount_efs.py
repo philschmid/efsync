@@ -1,11 +1,9 @@
 import boto3
 import paramiko
 from efsync.utils.helper.createSSHClient import createSSHClient
-from efsync.logger import get_logger
-logger = get_logger()
 
 
-def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None, ec2_key_name=None):
+def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None, ec2_key_name=None, logger=None):
     try:
         client = bt3.client('ec2')
         response = client.describe_instances(InstanceIds=[instance_id])
