@@ -120,7 +120,7 @@ def efsync(input_args):
         #
         if 'requirements' in args and 'efs_pip_dir' in args:
             logger.info('coping pip packages with scp to ec2 instance')
-            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['efs_pip_dir'], ec2_key_name=args['ec2_key_name']
+            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=f".efsync/{args['efs_pip_dir']}", ec2_key_name=args['ec2_key_name']
                               )
             logger.info('copied pip packages')
         if 'file_dir' in args:
@@ -150,7 +150,7 @@ def efsync(input_args):
         # deletes local directory #optional
         # delete_dir()
         logger.info(
-            f'#################### finished after {round(time.time()-start,2)} seconds ####################')
+            f'#################### finished after {round(time.time()-start,2)/60} minutes ####################')
 
     except Exception as e:
         err = repr(e)

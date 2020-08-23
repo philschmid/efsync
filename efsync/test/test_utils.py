@@ -1,12 +1,12 @@
 import pytest
 import boto3
-from utils.dir import create_dir, delete_dir
-from utils.pip_install import pip_install_requirements
-from utils.ssh_key import create_ssh_key, delete_ssh_key
-from utils.ec2_security_group import create_secruity_group, delete_secruity_group, get_security_group_id
-from utils.ec2_instance import create_ec2_instance, terminate_ec2_instance
-from utils.ec2_mount_efs import mount_efs
-from utils.scp_to_ec2 import copy_files_to_ec2
+from efsync.utils.dir import create_dir, delete_dir
+from efsync.utils.pip_install import pip_install_requirements
+from efsync.utils.ssh_key import create_ssh_key, delete_ssh_key
+from efsync.utils.ec2_security_group import create_secruity_group, delete_secruity_group, get_security_group_id
+from efsync.utils.ec2_instance import create_ec2_instance, terminate_ec2_instance
+from efsync.utils.ec2_mount_efs import mount_efs
+from efsync.utils.scp_to_ec2 import copy_files_to_ec2
 
 profile = 'schueler'
 region = 'eu-central-1'
@@ -68,14 +68,15 @@ def test_ec2_create_instance():
 
 def test_mount_efs():
     bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    iid = 'i-0f9854e5ae9c5516f'
-    res = mount_efs(bt3, iid)
+    iid = 'i-0ce18ee13d9747027'
+    res = mount_efs(bt3=bt3, instance_id=iid, efs_filesystem_id='fs-2226b27a',
+                    clean_efs=True, ec2_key_name='efsync-asd913fjgq3')
     assert res == True
 
 
 def test_scp_to_ec2_efs():
     bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    iid = 'i-0f9854e5ae9c5516f'
+    iid = 'i-02e5ed4a7731b716f'
     res = copy_files_to_ec2(bt3, iid, '.efsync/lib')
     assert res == True
 

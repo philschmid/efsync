@@ -1,10 +1,16 @@
 import os
 import subprocess
+import shutil
 
 
 def pip_install_requirements(file='requirements.txt', python_version='', pip_dir='', default_dir=".efsync"):
     try:
-        process = subprocess.run([f'docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t {default_dir}/{pip_dir} -r {file}'],
+        shutil.rmtree(f"{default_dir}/{pip_dir}")
+        os.mkdir(f"{default_dir}/{pip_dir}")
+    except Exception as e:
+        raise(e)
+    try:
+        process = subprocess.run([f' docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t {default_dir}/{pip_dir} -r {file}'],
                                  shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         if('Installing collected packages' in process.stdout):
             return True
