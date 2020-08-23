@@ -1,11 +1,9 @@
 import boto3
 import paramiko
 from efsync.utils.helper.createSSHClient import createSSHClient
-from efsync.logger import get_logger
-logger = get_logger()
 
 
-def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None, ec2_key_name=None):
+def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None, ec2_key_name=None, logger=None):
     try:
         client = bt3.client('ec2')
         response = client.describe_instances(InstanceIds=[instance_id])
@@ -34,6 +32,12 @@ def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None
             'sudo chown -R ec2-user:ec2-user efs')
         stdin.flush()
         logger.info(stdout.read().decode('utf-8'))
+        # log mounted efs
+        stdin, stdout, stderr = ssh.exec_command(
+            "df -h | egrep '^Filesystem|efs'")
+        stdin.flush()
+        logger.info(stdout.read().decode('utf-8'))
+
         # clean efs if wanted
         if(clean_efs):
             stdin, stdout, stderr = ssh.exec_command(
