@@ -1,0 +1,18 @@
+#lambda ci python version for pip installation
+python_version: 3.8
+# pip directory
+efs_pip_dir: lib
+# extra directory for file upload like ML models
+file_dir: ml
+# requirements file
+requirements: requirements.txt
+# Defines if the efs should be cleaned up before uploading
+clean_efs: True
+# aws profile configuration
+aws_profile: schueler-vz
+aws_region: eu-central-1
+
+#aws vpc and ec2 shit
+efs_filesystem_id: fs-2226b27a
+subnet_Id: subnet-17f97a7d
+ec2_key_name: efsync-asd913fjgq3

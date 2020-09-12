@@ -2,7 +2,7 @@ import os
 import boto3
 import sys
 import yaml
-from efsync.utils import create_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, pip_install_requirements, copy_files_to_ec2
+from efsync.utils import create_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, install_pip_on_ec2, copy_files_to_ec2
 from efsync.logger import get_logger
 import time
 import argparse
@@ -72,7 +72,7 @@ def efsync(input_args):
         #
         if 'requirements' in args and 'efs_pip_dir' in args:
             logger.info(f"installing pip packages to {args['efs_pip_dir']}")
-            pip_install_requirements(
+            install_pip_on_ec2(
                 python_version=args['python_version'], pip_dir=args['efs_pip_dir'])
             logger.info('installed pip packages')
         #

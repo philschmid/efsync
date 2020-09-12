@@ -1,7 +1,8 @@
 import pytest
 import boto3
 from efsync.utils.dir import create_dir, delete_dir
-from efsync.utils.pip_install import pip_install_requirements
+from efsync.utils.pip_install_local import pip_install_requirements
+from efsync.utils.ec2_install_pip import install_pip_on_ec2, read_requirements_from_file
 from efsync.utils.ssh_key import create_ssh_key, delete_ssh_key
 from efsync.utils.ec2_security_group import create_secruity_group, delete_secruity_group, get_security_group_id
 from efsync.utils.ec2_instance import create_ec2_instance, terminate_ec2_instance
@@ -72,6 +73,12 @@ def test_mount_efs():
     res = mount_efs(bt3=bt3, instance_id=iid, efs_filesystem_id='fs-2226b27a',
                     clean_efs=True, ec2_key_name='efsync-asd913fjgq3')
     assert res == True
+
+
+def test_read_requirements_from_file():
+    file_path = 'requirements.txt'
+    res = read_requirements_from_file(file_path)
+    assert isinstance(res, str)
 
 
 def test_scp_to_ec2_efs():

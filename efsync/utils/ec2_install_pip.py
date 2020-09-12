@@ -5,8 +5,26 @@ import boto3
 # install everythin directly into efs instead of copying it
 
 
+def read_requirements_from_file(file_path):
+    try:
+        # read all requirements from file and remove \n
+        install_list = open(file_path, 'r').read().splitlines()
+        # removes empty lines and comments
+        install_requires = [
+            str(requirement)
+            for requirement
+            in install_list if not requirement.startswith('#') and len(requirement) > 0]
+        return ' '.join(install_requires)
+    except Exception as e:
+        print(e)
+        raise(e)
+
+
 def install_pip_on_ec2(bt3=None, instance_id=None, python_version=None, pip_dir=None, ec2_key_name=None, logger=None, file=None):
     try:
+        # read requirements into file_string
+        requirements_string = read_requirements_from_file(file)
+        # get boto3 client
         client = bt3.client('ec2')
         response = client.describe_instances(InstanceIds=[instance_id])
         # get public dns
@@ -31,7 +49,7 @@ def install_pip_on_ec2(bt3=None, instance_id=None, python_version=None, pip_dir=
         logger.info(stdout.read().decode('utf-8'))
         # install pip packages to directory
         stdin, stdout, stderr = ssh.exec_command(
-            f' docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t efs/{pip_dir} -r {file}')
+            f' docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t efs/{pip_dir} {requirements_string}')
         stdin.flush()
         logger.info(stdout.read().decode('utf-8'))
     except Exception as e:
