@@ -3,7 +3,7 @@ import boto3
 import sys
 import yaml
 import time
-from efsync.utils import create_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, install_pip_on_ec2, copy_files_to_ec2
+from efsync.utils import create_dir, delete_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, install_pip_on_ec2, copy_files_to_ec2
 from efsync.logger import get_logger
 import argparse
 logger = get_logger()
