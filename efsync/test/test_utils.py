@@ -11,14 +11,15 @@ from efsync.utils.scp_to_ec2 import copy_files_to_ec2
 
 profile = 'schueler'
 region = 'eu-central-1'
+key_name = 'unit-tests-12312'
+subnet_Id = 'subnet-17f97a7d'
+efs_filesystem_id = 'fs-2226b27a'
+test_dor = 'efsync/test/data'
 
 
-def test_create_dir():
+def test_dir():
     res = create_dir()
     assert res == True
-
-
-def test_delete_dir():
     res = delete_dir()
     assert res == True
 
@@ -30,48 +31,88 @@ def test_pip_install():
     assert res == True
 
 
-def test_create_ssh_key():
-    create_dir()
-    res = create_ssh_key()
-    # delete_dir()
-    assert res == True
-
-
-def test_delete_ssh_key():
-    # create_dir()
-    res = delete_ssh_key()
-    # delete_dir()
-    assert res == True
-
-
 def test_ec2_sec_group():
-    res = create_secruity_group()
-    assert isinstance(res, str)
-    res = delete_secruity_group(group_id=res)
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
+    res = create_secruity_group(bt3)
+    assert isinstance(res, int)
+    get_id = get_security_group_id(bt3)
+    assert get_id == res
+    res = delete_secruity_group(bt3, res)
     assert res == True
 
 
-def test_get_ec_security_group():
-    bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    res = get_security_group_id(bt3)
-    print(res)
-    assert len(res) > 0
-
-
-def test_ec2_create_instance():
+def test_ssh_key():
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
     create_dir()
-    security_id = create_secruity_group()
-    create_ssh_key()
+    res = create_ssh_key(bt3, key_name)
+    assert res == True
+    res = delete_ssh_key(bt3, key_name)
+    delete_dir()
+    assert res == True
+
+
+def test_ec2_instance():
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
+    res = create_dir()
+    assert res == True
+
+    security_id = create_secruity_group(bt3)
+    assert len(security_id) > 0
+    res = create_ssh_key(bt3, key_name)
+    assert res == True
     ins_id = create_ec2_instance(security_group=security_id,
-                                 subnet_Id='subnet-17f97a7d')
-    assert isinstance(ins_id, str)
+                                 subnet_Id=subnet_Id)
+    assert len(ins_id) > 0
+    res = terminate_ec2_instance(bt3=bt3, instance_id=ins_id)
+    assert res == True
+    res = delete_ssh_key(bt3, key_name)
+    assert res == True
+    res = delete_secruity_group(bt3, security_id)
+    assert res == True
+
+
+def helper_create_ec2_instance(bt3):
+    # pre
+    res = create_dir()
+    assert res == True
+
+    security_id = create_secruity_group(bt3)
+    assert len(security_id) > 0
+    res = create_ssh_key(bt3, key_name)
+    assert res == True
+    ins_id = create_ec2_instance(security_group=security_id,
+                                 subnet_Id=subnet_Id)
+    assert len(ins_id) > 0
+    return ins_id
+
+
+def helper_del_ec2_instance(bt3, ins_id):
+    # post
+    res = terminate_ec2_instance(bt3=bt3, instance_id=ins_id)
+    assert res == True
+    res = delete_ssh_key(bt3, key_name)
+    assert res == True
+    res = delete_secruity_group(bt3, security_id)
+    assert res == True
+
+    return True
 
 
 def test_mount_efs():
-    bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    iid = 'i-0ce18ee13d9747027'
-    res = mount_efs(bt3=bt3, instance_id=iid, efs_filesystem_id='fs-2226b27a',
-                    clean_efs=True, ec2_key_name='efsync-asd913fjgq3')
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
+    # pre
+    ins_id = helper_create_ec2_instance(bt3)
+    assert len(ins_id) > 0
+    # test
+    res = mount_efs(bt3=bt3, instance_id=ins_id, efs_filesystem_id=efs_filesystem_id,
+                    clean_efs=True, ec2_key_name=key_name)
+    assert res == True
+    # after
+    res = helper_del_ec2_instance(bt3=bt3, instance_id=ins_id)
     assert res == True
 
 
@@ -82,17 +123,30 @@ def test_read_requirements_from_file():
 
 
 def test_scp_to_ec2_efs():
-    bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    iid = 'i-02e5ed4a7731b716f'
-    res = copy_files_to_ec2(bt3, iid, '.efsync/lib')
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
+    # pre
+    ins_id = helper_create_ec2_instance(bt3)
+    assert len(ins_id) > 0
+    # test
+    res = copy_files_to_ec2(bt3=bt3, instance_id=ins_id,
+                            mv_dir=test_file, ec2_key_name=key_name)
+    assert res == True
+    # after
+    res = helper_del_ec2_instance(bt3=bt3, instance_id=ins_id)
     assert res == True
 
 
-def test_ec2_delete_instance():
-    iid = 'i-0ff0b215fa94eb081'
-    bt3 = boto3.session.Session(profile_name=profile, region_name=region)
-    res = terminate_ec2_instance(bt3=bt3, instance_id=iid)
-    delete_ssh_key(bt3, 'test-script-asd913fjgq3')
-    # deletes secruity group on ec2
-    delete_secruity_group(bt3, 'sg-0aa1ef3fe21dde160	')
+def test_ec2_pip_install():
+    bt3 = boto3.session.Session(
+        profile_name=profile, region_name=region)
+    # pre
+    ins_id = helper_create_ec2_instance(bt3)
+    assert len(ins_id) > 0
+    # test
+    res = install_pip_on_ec2(bt3=bt3, instance_id=ins_id, python_version="3.8",
+                             pip_dir='lib', ec2_key_name=key_name, file='requirements.txt')
+    assert res == True
+    # after
+    res = helper_del_ec2_instance(bt3=bt3, instance_id=ins_id)
     assert res == True

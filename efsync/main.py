@@ -67,14 +67,7 @@ def efsync(input_args):
         logger.info('create .efsync directory')
         create_dir()
         logger.info('created directory')
-        #
-        # install pip requirements
-        #
-        if 'requirements' in args and 'efs_pip_dir' in args:
-            logger.info(f"installing pip packages to {args['efs_pip_dir']}")
-            install_pip_on_ec2(
-                python_version=args['python_version'], pip_dir=args['efs_pip_dir'])
-            logger.info('installed pip packages')
+
         #
         # creates security_group
         #
@@ -116,13 +109,22 @@ def efsync(input_args):
                   clean_efs=args['clean_efs'], ec2_key_name=args['ec2_key_name'], logger=logger)
         logger.info('mounted efs')
         #
-        # copy all files with scp from local directory to ec2 mounted efs
+        # install pip requirements
         #
         if 'requirements' in args and 'efs_pip_dir' in args:
-            logger.info('coping pip packages with scp to ec2 instance')
-            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=f".efsync/{args['efs_pip_dir']}", ec2_key_name=args['ec2_key_name']
-                              )
-            logger.info('copied pip packages')
+            logger.info(f"installing pip packages to {args['efs_pip_dir']}")
+            install_pip_on_ec2(
+                python_version=args['python_version'], pip_dir=args['efs_pip_dir'])
+            logger.info('installed pip packages')
+        #
+        # copy all files with scp from local directory to ec2 mounted efs
+        #
+        #
+        # if 'requirements' in args and 'efs_pip_dir' in args:
+        #     logger.info('coping pip packages with scp to ec2 instance')
+        #     copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=f".efsync/{args['efs_pip_dir']}", ec2_key_name=args['ec2_key_name']
+        #                       )
+        #     logger.info('copied pip packages')
         if 'file_dir' in args:
             logger.info(f"coping files from {args['file_dir']} to ec2")
             copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['file_dir'], ec2_key_name=args['ec2_key_name']
