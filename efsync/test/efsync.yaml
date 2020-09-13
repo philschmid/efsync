@@ -3,8 +3,10 @@ python_version: 3.8
 # pip directory
 efs_pip_dir: lib
 # extra directory for file upload like ML models
-file_dir: ml
-# requirements file
+file_dir: efsync/test/data
+# name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml
+# requirements path/file
 requirements: requirements.txt
 # Defines if the efs should be cleaned up before uploading
 clean_efs: True
