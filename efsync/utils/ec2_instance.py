@@ -1,9 +1,11 @@
 import boto3
 from efsync.utils.ec2_waiter import wait_for_ec2
+from efsync.utils.ec2_security_group import get_security_group_id
 
 
 def create_ec2_instance(bt3=None, security_group='', key_name='', subnet_Id=''):
     try:
+        default_sec_id = get_security_group_id(bt3, 'default')
         ec2 = bt3.resource('ec2')
         instance = ec2.create_instances(
             BlockDeviceMappings=[
@@ -24,7 +26,7 @@ def create_ec2_instance(bt3=None, security_group='', key_name='', subnet_Id=''):
             InstanceType='t2.micro',
             SecurityGroupIds=[
                 security_group,
-                'sg-5018d428'
+                default_sec_id
             ],
             SubnetId=subnet_Id,
             KeyName=key_name

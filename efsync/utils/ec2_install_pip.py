@@ -49,7 +49,7 @@ def install_pip_on_ec2(bt3=None, instance_id=None, python_version=None, pip_dir=
         logger.info(stdout.read().decode('utf-8'))
         # install pip packages to directory
         stdin, stdout, stderr = ssh.exec_command(
-            f' docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t efs/{pip_dir} {requirements_string}')
+            f'sudo docker run -v "$PWD":/var/task lambci/lambda:build-python{python_version} pip3 --no-cache-dir install -t efs/{pip_dir} {requirements_string}')
         stdin.flush()
         logger.info(stdout.read().decode('utf-8'))
     except Exception as e:
