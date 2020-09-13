@@ -31,6 +31,7 @@ def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None
         stdin, stdout, stderr = ssh.exec_command(
             'sudo chown -R ec2-user:ec2-user efs')
         stdin.flush()
+        logger.info('Adjust permission of mounted efs/')
         logger.info(stdout.read().decode('utf-8'))
         # log mounted efs
         stdin, stdout, stderr = ssh.exec_command(

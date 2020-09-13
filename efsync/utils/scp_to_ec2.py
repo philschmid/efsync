@@ -4,8 +4,9 @@ from efsync.utils.helper.createSSHClient import createSSHClient
 import boto3
 
 
-def copy_files_to_ec2(bt3=None, instance_id='', mv_dir='', ec2_dir='/home/ec2-user/efs', ec2_key_name=None):
+def copy_files_to_ec2(bt3=None, instance_id='', mv_dir='', ec2_dir='', ec2_key_name=None):
     try:
+        default_ec2_path = '/home/ec2-user/efs'
         client = bt3.client('ec2')
         response = client.describe_instances(InstanceIds=[instance_id])
         # get public dns
@@ -16,7 +17,8 @@ def copy_files_to_ec2(bt3=None, instance_id='', mv_dir='', ec2_dir='/home/ec2-us
         scp = SCPClient(ssh.get_transport())
         # Uploading the 'test' directory with its content in the
         # '/home/user/dump' remote directory
-        scp.put(mv_dir, recursive=True, remote_path=ec2_dir)
+        scp.put(mv_dir, recursive=True,
+                remote_path=f"{default_ec2_path}/{ec2_dir}")
     except Exception as e:
         logger.error(repr(e))
         raise(e)
