@@ -1,6 +1,7 @@
 import boto3
 from efsync.utils.ec2_waiter import wait_for_ec2
 from efsync.utils.ec2_security_group import get_security_group_id
+import time
 
 
 def create_ec2_instance(bt3=None, security_group='', key_name='', subnet_Id=''):
@@ -32,6 +33,7 @@ def create_ec2_instance(bt3=None, security_group='', key_name='', subnet_Id=''):
             KeyName=key_name
         )
         wait_for_ec2(instance_id=instance[0].id, wait_type='start')
+        time.sleep(20)
         return instance[0].id
     except Exception as e:
         print(repr(e))

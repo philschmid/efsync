@@ -4,7 +4,6 @@ import sys
 import yaml
 from efsync.utils import create_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, install_pip_on_ec2, copy_files_to_ec2
 from efsync.logger import get_logger
-import time
 import argparse
 logger = get_logger()
 
@@ -104,7 +103,6 @@ def efsync(input_args):
         #
         logger.info(f'mount efs file system with instance {instance_id}')
         logger.info(f'sleeping 30 seconds.... wait ec2 is up completely')
-        time.sleep(30)
         mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'],
                   clean_efs=args['clean_efs'], ec2_key_name=args['ec2_key_name'], logger=logger)
         logger.info('mounted efs')
