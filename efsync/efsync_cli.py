@@ -48,6 +48,9 @@ def main():
     parser.add_argument("--ec2_key_name", "-ekn",
                         help="temporary key name for the ec2 instance")
 
+    parser.add_argument("--file_dir_on_ec2", "-fdoe",
+                        help="name of the directory where your file from <file_dir> will be uploaded")
+
     args = parser.parse_args()
     print(vars(args))
     # efsync(vars(args))

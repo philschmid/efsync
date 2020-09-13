@@ -2,9 +2,9 @@ import os
 import boto3
 import sys
 import yaml
-from efsync.utils import create_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, pip_install_requirements, copy_files_to_ec2
-from efsync.logger import get_logger
 import time
+from efsync.utils import create_dir, delete_dir, create_secruity_group, create_ssh_key, get_security_group_id, create_ec2_instance, mount_efs, terminate_ec2_instance, delete_ssh_key, delete_secruity_group, install_pip_on_ec2, copy_files_to_ec2
+from efsync.logger import get_logger
 import argparse
 logger = get_logger()
 
@@ -57,7 +57,7 @@ def efsync(input_args):
             logger.info(f'loading config from {input_args}')
             args = get_args(input_args)
             logger.info('loaded config')
-        # efsync ........
+        # efsync -e -> using clie
         else:
             logger.info(f'using CLI parameters')
             args = get_boto3_client(input_args)
@@ -67,14 +67,7 @@ def efsync(input_args):
         logger.info('create .efsync directory')
         create_dir()
         logger.info('created directory')
-        #
-        # install pip requirements
-        #
-        if 'requirements' in args and 'efs_pip_dir' in args:
-            logger.info(f"installing pip packages to {args['efs_pip_dir']}")
-            pip_install_requirements(
-                python_version=args['python_version'], pip_dir=args['efs_pip_dir'])
-            logger.info('installed pip packages')
+
         #
         # creates security_group
         #
@@ -97,7 +90,7 @@ def efsync(input_args):
                 f"recreating ssh key {args['ec2_key_name']}")
             delete_ssh_key(args['bt3'], args['ec2_key_name'])
             create_ssh_key(args['bt3'], args['ec2_key_name'])
-        logger.info('created ssh key for scp and ssh in .efsync')
+        logger.info('created ssh key for scp and ssh in .efsync directory')
         #
         # starts ec2 instance in vpc with security group and ssh key
         #
@@ -111,21 +104,31 @@ def efsync(input_args):
         #
         logger.info(f'mount efs file system with instance {instance_id}')
         logger.info(f'sleeping 30 seconds.... wait ec2 is up completely')
-        time.sleep(30)
         mount_efs(bt3=args['bt3'], instance_id=instance_id, efs_filesystem_id=args['efs_filesystem_id'],
                   clean_efs=args['clean_efs'], ec2_key_name=args['ec2_key_name'], logger=logger)
         logger.info('mounted efs')
         #
-        # copy all files with scp from local directory to ec2 mounted efs
+        # install pip requirements
         #
         if 'requirements' in args and 'efs_pip_dir' in args:
-            logger.info('coping pip packages with scp to ec2 instance')
-            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=f".efsync/{args['efs_pip_dir']}", ec2_key_name=args['ec2_key_name']
-                              )
-            logger.info('copied pip packages')
+            logger.info(
+                f"installing pip packages to {args['efs_pip_dir']} on ec2/home/efs")
+            install_pip_on_ec2(bt3=args['bt3'], instance_id=instance_id, python_version=args['python_version'],
+                               pip_dir=args['efs_pip_dir'], ec2_key_name=args['ec2_key_name'], file=args['requirements'], logger=logger)
+
+            logger.info('installed pip packages')
+        #
+        # copy all files with scp from local directory to ec2 mounted efs
+        #
+        #
+        # if 'requirements' in args and 'efs_pip_dir' in args:
+        #     logger.info('coping pip packages with scp to ec2 instance')
+        #     copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=f".efsync/{args['efs_pip_dir']}", ec2_key_name=args['ec2_key_name']
+        #                       )
+        #     logger.info('copied pip packages')
         if 'file_dir' in args:
             logger.info(f"coping files from {args['file_dir']} to ec2")
-            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, mv_dir=args['file_dir'], ec2_key_name=args['ec2_key_name']
+            copy_files_to_ec2(bt3=args['bt3'], instance_id=instance_id, ec2_dir=args['file_dir_on_ec2'],  mv_dir=args['file_dir'], ec2_key_name=args['ec2_key_name']
                               )
             logger.info(f"copied files from {args['file_dir']}")
         #
@@ -148,10 +151,10 @@ def efsync(input_args):
         logger.info('security group deleted')
 
         # deletes local directory #optional
-        # delete_dir()
+        delete_dir()
         logger.info(
             f'#################### finished after {round(time.time()-start,2)/60} minutes ####################')
-
+        return True
     except Exception as e:
         err = repr(e)
         raise(err)

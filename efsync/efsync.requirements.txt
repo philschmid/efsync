@@ -2,3 +2,6 @@ scp
 paramiko
 boto3
 pyaml
+pytest
+pytest-assume
+
