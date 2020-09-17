@@ -32,7 +32,7 @@ def create_ec2_instance(bt3=None, security_group='', key_name='', subnet_Id=''):
             SubnetId=subnet_Id,
             KeyName=key_name
         )
-        wait_for_ec2(instance_id=instance[0].id, wait_type='start')
+        wait_for_ec2(bt3=bt3, instance_id=instance[0].id, wait_type='start')
         time.sleep(25)
         return instance[0].id
     except Exception as e:
@@ -46,7 +46,7 @@ def terminate_ec2_instance(bt3=None, instance_id=''):
         instance = ec2.Instance(instance_id)
         # ec2.instances.filter(InstanceIds=[instance_id]).terminate()
         instance.terminate()
-        wait_for_ec2(instance_id=instance_id, wait_type='terminate')
+        wait_for_ec2(bt3=bt3, instance_id=instance_id, wait_type='terminate')
         return True
     except Exception as e:
         err = repr(e)
