@@ -1,8 +1,7 @@
 import boto3
 
 
-def wait_for_ec2(profile='schueler', region='eu-central-1', instance_id='', wait_type=''):
-    bt3 = boto3.session.Session(profile_name=profile, region_name=region)
+def wait_for_ec2(bt3=None, instance_id='', wait_type=''):
     ec2_client = bt3.client('ec2')
     try:
         if wait_type == 'terminate':

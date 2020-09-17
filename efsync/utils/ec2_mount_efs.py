@@ -44,7 +44,7 @@ def mount_efs(bt3=None, instance_id=None, efs_filesystem_id=None, clean_efs=None
             stdin, stdout, stderr = ssh.exec_command(
                 'sudo rm -rf efs/*')
             stdin.flush()
-            logger.info(stdout.read().decode('utf-8'))
+            logger.info('cleaned mounted efs')
 
     except Exception as e:
         print(e)
