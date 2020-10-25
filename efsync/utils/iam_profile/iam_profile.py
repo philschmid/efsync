@@ -18,7 +18,7 @@ def create_iam_profile(config: dict = None,retry=False):
             policy["Statement"].append({
                 "Effect": "Allow",
                 "Action": ["s3:*"],
-                "Resource": [f"arn:aws:s3:::{config['s3_bucket']}"]
+                "Resource": [f"arn:aws:s3:::{config['s3_bucket']}",f"arn:aws:s3:::{config['s3_bucket']}/*"]
             })
         policy["Statement"].append({
             "Effect": "Allow",
