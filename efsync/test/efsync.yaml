@@ -1,0 +1,21 @@
+#standard configuration
+efs_filesystem_id: fs-2226b27a # aws efs filesystem id (moint point)
+subnet_Id: subnet-17f97a7d # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: schueler-vz # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# pip packages configurations
+efs_pip_dir: lib # pip directory on ec2
+python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+
+# # s3 config
+# s3_bucket: my-bucket-with-files # s3 bucket name from files should be downloaded
+# s3_keyprefix: models/bert # s3 keyprefix for the files
+
+# # upload files with scp to efs
+# file_dir: local_dir # extra local directory for file upload like ML models
+# file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
