@@ -20,11 +20,11 @@ def custom_waiter(config, instance_id):
             # counts 1 retry up
             retry += 1
             # if it failed 10 times it breaks
-            if retry >= 10:
+            if retry >= 20:
                 break
             time.sleep(30)
         # returns true oder false depending on success
-        if retry >= 10:
+        if retry >= 20:
             return False
         else:
             return True

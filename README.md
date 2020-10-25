@@ -64,10 +64,10 @@ requirements: requirements.txt # path + file to requirements.txt which holds the
 # s3 config
 s3_bucket: my-bucket-with-files # s3 bucket name from files should be downloaded
 s3_keyprefix: models/bert # s3 keyprefix for the files
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
 
 # upload files with scp to efs
 file_dir: local_dir # extra local directory for file upload like ML models
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
 ```
 
 ## Configuration with CLI Parameters

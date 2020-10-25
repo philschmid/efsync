@@ -1,7 +1,7 @@
 import json
 
 
-def create_iam_profile(config: dict = None):
+def create_iam_profile(config: dict = None,retry=False):
     """
     create the instance profile
     both instance_profile and role have the same same so instance profile can be
@@ -18,13 +18,13 @@ def create_iam_profile(config: dict = None):
             policy["Statement"].append({
                 "Effect": "Allow",
                 "Action": ["s3:*"],
-                "Resource": [f"arn:aws:s3:::{s3_bucket}"]
+                "Resource": [f"arn:aws:s3:::{config['s3_bucket']}"]
             })
         policy["Statement"].append({
             "Effect": "Allow",
             "Action": [
                 "ec2:DeleteTags",
-                "ec2:CreateTags"
+                "ec2:CreateTags",
             ],
             "Resource": "*"
         })
@@ -69,19 +69,25 @@ def create_iam_profile(config: dict = None):
         }
         return IamInstanceProfile
     except Exception as e:
-        iam_client = config['bt3'].client('iam')
-        try:
-            instance_profile = iam_client.get_instance_profile(
-                InstanceProfileName=instance_profile
-            )
-            IamInstanceProfile = {
-                'Arn': instance_profile['InstanceProfile']['Arn'],
-                'Name': instance_profile['InstanceProfile']['InstanceProfileName']
-            }
-            return IamInstanceProfile
-        except Exception as e:
-            print(e)
+        res = delete_iam_profile(config)
+        if res and retry == False:
+            return create_iam_profile(config,True)
+        else:
             raise(e)
+
+        # iam_client = config['bt3'].client('iam')
+        # try:
+        #     instance_profile = iam_client.get_instance_profile(
+        #         InstanceProfileName=instance_profile
+        #     )
+        #     IamInstanceProfile = {
+        #         'Arn': instance_profile['InstanceProfile']['Arn'],
+        #         'Name': instance_profile['InstanceProfile']['InstanceProfileName']
+        #     }
+        #     return IamInstanceProfile
+        # except Exception as e:
+        #     print(e)
+        #     raise(e)
 
 
 def delete_iam_profile(config: dict = None):
