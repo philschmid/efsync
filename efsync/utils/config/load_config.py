@@ -1,6 +1,7 @@
 import os
 from efsync.utils.config.get_boto3_client import get_boto3_client
 from efsync.utils.config.load_args_from_yaml import load_args_from_yaml
+from efsync.utils.config.validate_config import validate_config
 
 
 def load_config(input_args):
@@ -17,6 +18,10 @@ def load_config(input_args):
         # efsync -e -> using cli
         else:
             args = input_args
+        
+        # validate config
+        validate_config(args)
+        
         args = get_boto3_client(args)
         return args
     except Exception as e:
