@@ -12,7 +12,7 @@ def create_ec2_instance(config: dict = None):
     try:
         ec2 = config['bt3'].resource('ec2')
         instance_profile = create_iam_profile(config)
-
+        print(instance_profile)
         user_data = create_user_data(config)
         instance = ec2.create_instances(
             BlockDeviceMappings=[
@@ -39,7 +39,7 @@ def create_ec2_instance(config: dict = None):
             ],
             SubnetId=config['subnet_Id'],
             KeyName=config['key']['name'],
-            IamInstanceProfile={'Name': instance_profile['Name']})
+            IamInstanceProfile={'Arn': instance_profile['Arn']})
         # waits till it running
         wait_for_ec2(bt3=config['bt3'],
                      instance_id=instance[0].id, wait_type='start')
