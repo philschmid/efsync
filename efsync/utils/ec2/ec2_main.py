@@ -12,8 +12,9 @@ def create_ec2_instance(config: dict = None):
     try:
         ec2 = config['bt3'].resource('ec2')
         instance_profile = create_iam_profile(config)
-        print(instance_profile)
         user_data = create_user_data(config)
+        # was to fast for aws after creation
+        time.sleep(10)
         instance = ec2.create_instances(
             BlockDeviceMappings=[
                 {

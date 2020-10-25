@@ -26,7 +26,6 @@ def efsync(input_args):
         #
         logger.info('loading config')
         config = load_config(input_args)
-
         #
         # creates security_group
         #
