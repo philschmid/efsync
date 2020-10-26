@@ -1,8 +1,8 @@
-# 🚀 efsync
+# 🚀 efsync - Open-Source MLOps tool for running serverless machine learning
 
 [![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![pypi package deployment](https://github.com/philschmid/efsync/workflows/pypi%20package%20deployment/badge.svg) [![PyPI version fury.io](https://badge.fury.io/py/ansicolortags.svg)](https://pypi.python.org/pypi/efsync/)
 
-efsync is an CLI/SDK to automatically upload files and dependencies to AWS EFS. The CLI is easy to use, you only need access to an AWS Account, an AWS EFS-filesystem up and running. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start).
+efsync is an CLI/SDK tool, which automatically syncs files and dependencies to AWS EFS. The CLI is easy to use, you only need access to an AWS Account, an AWS EFS-filesystem up and running. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start). Efsync enables you to install dependencies with the AWS Lambda runtime directly into your EFS filesystem and use them in your AWS Lambda function. It enables you either combine this with syncing files from S3 or uploading them with SCP. You can also sync files from S3 and upload with SCP without installing Pip dependencies.
 
 i created several examples for every usecase.
 
@@ -12,6 +12,7 @@ i created several examples for every usecase.
 
 - [Quick Start](#quick-start)
 - [Configuration](#sdk)
+- [Usecase configurations](#usecase)
 - [Examples](#examples)
 - [CLI](#cli)
 - [Connect](#connect)
@@ -26,7 +27,7 @@ Example in Google Colab. [![Open In Colab](https://colab.research.google.com/ass
 pip3 install efsync
 ```
 
-2.  **sync your pip packages or files to AWS EFS**
+2.  **sync your pip dependencies or files to AWS EFS**
 
 usage with the cli
 
@@ -58,10 +59,10 @@ clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`
 aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
 aws_region: eu-central-1 # the aws region where the efs is running
 
-# pip packages configurations
+# pip dependencies configurations
 efs_pip_dir: lib # pip directory on ec2
-python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
-requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+python_version: 3.8 # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip dependencies
 
 # s3 config
 s3_bucket: my-bucket-with-files # s3 bucket name from files should be downloaded
@@ -113,8 +114,8 @@ config = {
   'aws_profile': 'efysnc', # aws iam profile with required permission configured in .aws/credentials
   'aws_region': 'eu-central-1', # the aws region where the efs is running
   'efs_pip_dir': 'lib',  # pip directory on ec2
-  'python_version': 3.8,  # python version used for installing pip packages -> should be used as lambda runtime afterwads
-  'requirements': 'requirements.txt', # path + file to requirements.txt which holds the installable pip packages
+  'python_version': 3.8,  # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
+  'requirements': 'requirements.txt', # path + file to requirements.txt which holds the installable pip dependencies
   'file_dir': 'local_dir', # extra local directory for file upload like ML models
   'file_dir_on_ec2': 'ml', # name of the directory where your file from <file_dir> will be uploaded
   's3_bucket': 'my-bucket-with-files', # s3 bucket name from files should be downloaded
@@ -130,7 +131,7 @@ efsync(config)
 
 # ✍🏻 <a name="usecase"></a> Usecase Configuration with `yaml` examples
 
-### Only installing Pip packages
+### Only installing Pip dependencies
 
 ```yaml
 #standard configuration
@@ -142,13 +143,13 @@ clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`
 aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
 aws_region: eu-central-1 # the aws region where the efs is running
 
-# pip packages configurations
+# pip dependencies configurations
 efs_pip_dir: lib # pip directory on ec2
-python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
-requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+python_version: 3.8 # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip dependencies
 ```
 
-### Installing Pip packages and syncing files from s3 to efs
+### Installing Pip dependencies and syncing files from s3 to efs
 
 ```yaml
 #standard configuration
@@ -160,10 +161,10 @@ clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`
 aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
 aws_region: eu-central-1 # the aws region where the efs is running
 
-# pip packages configurations
+# pip dependencies configurations
 efs_pip_dir: lib # pip directory on ec2
-python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
-requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+python_version: 3.8 # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip dependencies
 
 # s3 config
 s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
@@ -191,11 +192,11 @@ file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will
 
 # 🏗 <a name="examples"></a> Examples
 
-I provided several jupyter notebooks with examples. There are examples for installing pip packages only, installing pip packages and syncing files from s3 to efs, downloading only files from s3, installing pip packages and uploading files from local with scp and only uploading files with scp. All examples can be run in a Google Colab Notebook.
+I provided several jupyter notebooks with examples. There are examples for installing pip dependencies only, installing pip dependencies and syncing files from s3 to efs, downloading only files from s3, installing pip dependencies and uploading files from local with scp and only uploading files with scp. All examples can be run in a Google Colab Notebook.
 
-- [installing pip packages](./examples/efsync_pip_packages.ipynb)
-- [installing pip packages and syncing files from s3 to efs](./examples/efsync_pip_packages_and_s3_files.ipynb)
-- [installing pip packages and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
+- [installing pip dependencies](./examples/efsync_pip_packages.ipynb)
+- [installing pip dependencies and syncing files from s3 to efs](./examples/efsync_pip_packages_and_s3_files.ipynb)
+- [installing pip dependencies and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
 - [syncing files from s3 to efs](./examples/efsync_s3_files.ipynb)
 - [uploading local files with scp](./examples/efsync_scp_files.ipynb)
 
@@ -215,7 +216,7 @@ efsync('efsync.yaml')
 | -r        | --requirements      | requirements.txt | path of your requirements.txt                                                              |
 | -cf       | --config_file       | -                | path of your efsync.yaml                                                                   |
 | -py       | --python_version    | 3.8              | Python version used to install dependencies                                                |
-| -epd      | --efs_pip_dir       | lib              | directory where the pip packages will be installed on efs                                  |
+| -epd      | --efs_pip_dir       | lib              | directory where the pip dependencies will be installed on efs                              |
 | -efi      | --efs_filesystem_id | -                | File System ID from the EFS filesystem                                                     |
 | -ce       | --clean_efs         | -                | Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading |
 | -fd       | --file_dir          | tmp              | directory where all other files will be placed                                             |
