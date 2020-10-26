@@ -7,7 +7,7 @@ print(find_packages())
 
 setup(
     name='efsync',
-    version='0.9.11',
+    version='0.9.24',
     packages=find_packages(),
     entry_points={
         "console_scripts": ["efsync=efsync.efsync_cli:main"]
@@ -18,7 +18,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/philschmid",
-        python_requires=">=3.6",
+    python_requires=">=3.6",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

@@ -24,6 +24,8 @@ def create_ssh_key(bt3=None, key_name=''):
         res = delete_ssh_key(bt3, key_name)
         if res:
             return create_ssh_key(bt3, key_name)
+        else:
+            raise(e)
 
 
 def delete_ssh_key(bt3=None, key_name=''):

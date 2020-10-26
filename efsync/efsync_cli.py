@@ -58,7 +58,11 @@ def main():
                         help="s3 keyprefix of the directory in s3. Files will be downloaded")
 
     args = parser.parse_args()
-    efsync(vars(args))
+    args_dict = vars(args)
+    for k, v in dict(args_dict).items():
+        if v is None:
+            del args_dict[k]
+    efsync(args_dict)
 
 
 if __name__ == "__main__":

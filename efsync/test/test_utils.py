@@ -15,6 +15,7 @@ from efsync.utils.ssh.scp_to_ec2 import copy_files_to_ec2
 from efsync.utils.config.get_boto3_client import get_boto3_client
 from efsync.utils.config.load_args_from_yaml import load_args_from_yaml
 from efsync.utils.config.load_config import load_config
+from efsync.utils.config.validate_config import validate_config
 from efsync.utils.config.read_requirements_from_file import read_requirements_from_file
 from efsync.utils.ec2.create_user_data import create_user_data
 from efsync.utils.ec2.custom_waiter import custom_waiter
@@ -258,3 +259,36 @@ def test_custom_waiter():
     args = 'efsync/test/efsync.yaml'
     config = load_config(args)
     res = custom_waiter(config, 'i-0924fcb5b23576a9f')
+
+
+def test_validate_config():
+    # test all
+    config = {'aws_profile': 'schueler-vz', 'aws_region': 'eu-central-1',  'efs_filesystem_id': 'as','subnet_Id':'123',
+              'efs_pip_dir': 'lib', 'python_version': 3.8, 'requirements': 'efsync/test/requirements.txt',
+              'file_dir_on_ec2': 'ml', 's3_keyprefix': 'model/bert', 's3_bucket': 'mybucket',"ec2_key_name":'123',
+              'clean_efs': 'all',
+              }    
+    res = validate_config(config)
+    assert res == True
+    # test s3
+    config = {'aws_profile': 'schueler-vz', 'aws_region': 'eu-central-1',  'efs_filesystem_id': efs_filesystem_id,'subnet_Id':'123',
+              'file_dir_on_ec2': 'ml', 's3_keyprefix': 'model/bert', 's3_bucket': 'mybucket',"ec2_key_name":'123',
+              'clean_efs': 'file',
+              }
+    res = validate_config(config)
+    assert res == True
+
+    # test pip install
+    config = {'aws_profile': 'schueler-vz', 'aws_region': 'eu-central-1',  'efs_filesystem_id': efs_filesystem_id,'subnet_Id':'123',
+              'efs_pip_dir': 'lib', 'python_version': 3.8, 'requirements': 'efsync/test/requirements.txt',"ec2_key_name":'123',
+              'clean_efs': 'pip',
+              }
+    res = validate_config(config)
+    assert res == True
+    # test scp
+    config = {'aws_profile': 'schueler-vz', 'aws_region': 'eu-central-1',  'efs_filesystem_id': efs_filesystem_id,'subnet_Id':'123',
+              'file_dir_on_ec2': 'ml', 'file_dir': 'model/bert',"ec2_key_name":'123',
+              'clean_efs': 'file',
+              }
+    res = validate_config(config)
+    assert res == True
