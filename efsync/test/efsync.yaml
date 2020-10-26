@@ -7,10 +7,10 @@ clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`
 aws_profile: schueler-vz # aws iam profile with required permission configured in .aws/credentials
 aws_region: eu-central-1 # the aws region where the efs is running
 
-# pip packages configurations
-efs_pip_dir: lib # pip directory on ec2
-python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
-requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+# # pip packages configurations
+# efs_pip_dir: lib # pip directory on ec2
+# python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
+# requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
 
 # s3 config
 s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded

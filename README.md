@@ -44,6 +44,8 @@ efsync('efsync.yaml')
 
 # ⚙️ <a name="sdk"></a> Configurations
 
+There are 4 different ways to use efysnc in your project. You can create a `yaml` configuration and use the SDK, you can create a python `dict` and use the SDK, you can create a `yaml` configuration and use the CLI, or you can use the CLI with parameters. Below you can find examples for each of these. I also included afterwards configuration examples for the different use cases.
+
 ## Configuration with yaml file `efsync.yaml`
 
 ```yaml
@@ -68,6 +70,12 @@ file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will
 
 # upload files with scp to efs
 file_dir: local_dir # extra local directory for file upload like ML models
+```
+
+```python
+from efsync import efsync
+
+efsync('efsync.yaml')
 ```
 
 ## Configuration with CLI Parameters
@@ -112,16 +120,83 @@ config = {
   's3_bucket': 'my-bucket-with-files', # s3 bucket name from files should be downloaded
   's3_keyprefix': 'models/bert' # s3 keyprefix for the files
 }
+
+from efsync import efsync
+
+efsync(config)
+
+
+```
+
+# ✍🏻 <a name="usecase"></a> Usecase Configuration with `yaml` examples
+
+### Only installing Pip packages
+
+```yaml
+#standard configuration
+efs_filesystem_id: fs-2adfas123 # aws efs filesystem id (moint point)
+subnet_Id: subnet-xxx # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# pip packages configurations
+efs_pip_dir: lib # pip directory on ec2
+python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+```
+
+### Installing Pip packages and syncing files from s3 to efs
+
+```yaml
+#standard configuration
+efs_filesystem_id: fs-2226b27a # aws efs filesystem id (moint point)
+subnet_Id: subnet-17f97a7d # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# pip packages configurations
+efs_pip_dir: lib # pip directory on ec2
+python_version: 3.8 # python version used for installing pip packages -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
+
+# s3 config
+s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
+s3_keyprefix: distilbert # s3 keyprefix for the files
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+```
+
+### Only syncing files from s3 to efs
+
+```yaml
+#standard configuration
+efs_filesystem_id: fs-2226b27a # aws efs filesystem id (moint point)
+subnet_Id: subnet-17f97a7d # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# s3 config
+s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
+s3_keyprefix: distilbert # s3 keyprefix for the files
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
 ```
 
 # 🏗 <a name="examples"></a> Examples
 
-I provided several jupyter notebooks with examples. There are examples for installing pip packages only, installing pip packages and downloading files from s3, downloading only files from s3, installing pip packages and uploading files from local with scp and only uploading files with scp
+I provided several jupyter notebooks with examples. There are examples for installing pip packages only, installing pip packages and syncing files from s3 to efs, downloading only files from s3, installing pip packages and uploading files from local with scp and only uploading files with scp. All examples can be run in a Google Colab Notebook.
 
 - [installing pip packages](./examples/efsync_pip_packages.ipynb)
-- [installing pip packages and downloading files from s3](./examples/efsync_pip_packages_and_s3_files.ipynb)
+- [installing pip packages and syncing files from s3 to efs](./examples/efsync_pip_packages_and_s3_files.ipynb)
 - [installing pip packages and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
-- [downloading files from s3](./examples/efsync_s3_files.ipynb)
+- [syncing files from s3 to efs](./examples/efsync_s3_files.ipynb)
 - [uploading local files with scp](./examples/efsync_scp_files.ipynb)
 
 **simplest usage:**
