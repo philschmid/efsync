@@ -190,15 +190,54 @@ s3_keyprefix: distilbert # s3 keyprefix for the files
 file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
 ```
 
+### Installing Pip dependencies and uploading local files with scp to efs
+
+```yaml
+#standard configuration
+efs_filesystem_id: fs-2226b27a # aws efs filesystem id (moint point)
+subnet_Id: subnet-17f97a7d # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# upload files with scp to efs
+file_dir: local_dir # extra local directory for file upload like ML models
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+```
+
+### Only uploading local files with scp to efs
+
+```yaml
+#standard configuration
+efs_filesystem_id: fs-2226b27a # aws efs filesystem id (moint point)
+subnet_Id: subnet-17f97a7d # subnet of which the efs is running in
+ec2_key_name: efsync-asd913fjgq3 # required key name for starting the ec2 instance
+clean_efs: all # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
+# aws profile configuration
+aws_profile: efsync # aws iam profile with required permission configured in .aws/credentials
+aws_region: eu-central-1 # the aws region where the efs is running
+
+# pip dependencies configurations
+efs_pip_dir: lib # pip directory on ec2
+python_version: 3.8 # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
+requirements: requirements.txt # path + file to requirements.txt which holds the installable pip dependencies
+
+# upload files with scp to efs
+file_dir: local_dir # extra local directory for file upload like ML models
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+```
+
 # 🏗 <a name="examples"></a> Examples
 
 I provided several jupyter notebooks with examples. There are examples for installing pip dependencies only, installing pip dependencies and syncing files from s3 to efs, downloading only files from s3, installing pip dependencies and uploading files from local with scp and only uploading files with scp. All examples can be run in a Google Colab Notebook.
 
 - [installing pip dependencies](./examples/efsync_pip_packages.ipynb)
 - [installing pip dependencies and syncing files from s3 to efs](./examples/efsync_pip_packages_and_s3_files.ipynb)
-- [installing pip dependencies and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
+- WIP! [installing pip dependencies and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
 - [syncing files from s3 to efs](./examples/efsync_s3_files.ipynb)
-- [uploading local files with scp](./examples/efsync_scp_files.ipynb)
+- WIP! [uploading local files with scp](./examples/efsync_scp_files.ipynb)
 
 **simplest usage:**
 
