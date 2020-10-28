@@ -6,7 +6,7 @@ import boto3
 
 def copy_files_to_ec2(config):
     try:
-        default_ec2_path = '/home/ec2-user/efs'
+        default_ec2_path = '/efs'
         client = config['bt3'].client('ec2')
         response = client.describe_instances(
             InstanceIds=[config['instance_id']])
@@ -20,10 +20,10 @@ def copy_files_to_ec2(config):
         # '/home/user/dump' remote directory
         scp.put(config['file_dir'], recursive=True,
                 remote_path=f"{default_ec2_path}/{config['file_dir_on_ec2']}")
-    except Exception as e:
-        logger.error(repr(e))
-        raise(e)
-    finally:
         scp.close()
         ssh.close()
         return True
+    except Exception as e:
+        raise(e)
+        
+        
