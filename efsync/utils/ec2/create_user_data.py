@@ -37,7 +37,7 @@ def create_user_data(config: dict = None):
         
         if 'file_dir_on_ec2' in config and 'file_dir' in config:
             if '/' in config["file_dir"]:
-                additional_file_path = {config["file_dir"].split("/")[-1]}
+                additional_file_path = config["file_dir"].split("/")[-1]
             else: 
                  additional_file_path = config["file_dir"]
             

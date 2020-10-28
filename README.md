@@ -241,9 +241,9 @@ I provided several jupyter notebooks with examples. There are examples for insta
 
 - [installing pip dependencies](./examples/efsync_pip_packages.ipynb)
 - [installing pip dependencies and syncing files from s3 to efs](./examples/efsync_pip_packages_and_s3_files.ipynb)
-- WIP! [installing pip dependencies and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
+- [installing pip dependencies and uploading local files with scp](./examples/efsync_pip_packages_and_scp_files.ipynb)
 - [syncing files from s3 to efs](./examples/efsync_s3_files.ipynb)
-- WIP! [uploading local files with scp](./examples/efsync_scp_files.ipynb)
+- [uploading local files with scp](./examples/efsync_scp_files.ipynb)
 
 **simplest usage:**
 
