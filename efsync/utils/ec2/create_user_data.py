@@ -36,11 +36,16 @@ def create_user_data(config: dict = None):
                 f'aws s3 sync s3://{config["s3_bucket"]}/{config["s3_keyprefix"]} efs/{config["file_dir_on_ec2"]}')
         
         if 'file_dir_on_ec2' in config and 'file_dir' in config:
-            user_data.append(
-                    f'mkdir -p efs/{config["file_dir_on_ec2"]}/{config["file_dir"].split("/")[-1]}')
+            if '/' in config["file_dir"]:
+                additional_file_path = {config["file_dir"].split("/")[-1]}
+            else: 
+                 additional_file_path = config["file_dir"]
             
             user_data.append(
-                    f'chmod 777  /efs/{config["file_dir_on_ec2"]}/{config["file_dir"].split("/")[-1]}')
+                    f'mkdir -p efs/{config["file_dir_on_ec2"]}/{additional_file_path}')
+            
+            user_data.append(
+                    f'chmod 777  /efs/{config["file_dir_on_ec2"]}/{additional_file_path}')
         # add tag for user data finish script
         user_data.append(
             f"""aws ec2 create-tags --resources $(curl http://169.254.169.254/latest/meta-data/instance-id) --tags 'Key="user_data",Value=True' --region {config['aws_region']}""")

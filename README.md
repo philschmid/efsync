@@ -47,6 +47,8 @@ efsync('efsync.yaml')
 
 There are 4 different ways to use efysnc in your project. You can create a `yaml` configuration and use the SDK, you can create a python `dict` and use the SDK, you can create a `yaml` configuration and use the CLI, or you can use the CLI with parameters. Below you can find examples for each of these. I also included afterwards configuration examples for the different use cases.
 
+_Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens becaus wie `scp` recursivly_
+
 ## Configuration with yaml file `efsync.yaml`
 
 ```yaml
@@ -67,7 +69,7 @@ requirements: requirements.txt # path + file to requirements.txt which holds the
 # s3 config
 s3_bucket: my-bucket-with-files # s3 bucket name from files should be downloaded
 s3_keyprefix: models/bert # s3 keyprefix for the files
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
 
 # upload files with scp to efs
 file_dir: local_dir # extra local directory for file upload like ML models
@@ -117,7 +119,7 @@ config = {
   'python_version': 3.8,  # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
   'requirements': 'requirements.txt', # path + file to requirements.txt which holds the installable pip dependencies
   'file_dir': 'local_dir', # extra local directory for file upload like ML models
-  'file_dir_on_ec2': 'ml', # name of the directory where your file from <file_dir> will be uploaded
+  'file_dir_on_ec2': 'ml', # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
   's3_bucket': 'my-bucket-with-files', # s3 bucket name from files should be downloaded
   's3_keyprefix': 'models/bert' # s3 keyprefix for the files
 }
@@ -169,7 +171,7 @@ requirements: requirements.txt # path + file to requirements.txt which holds the
 # s3 config
 s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
 s3_keyprefix: distilbert # s3 keyprefix for the files
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
 ```
 
 ### Only syncing files from s3 to efs
@@ -187,10 +189,12 @@ aws_region: eu-central-1 # the aws region where the efs is running
 # s3 config
 s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
 s3_keyprefix: distilbert # s3 keyprefix for the files
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
 ```
 
 ### Installing Pip dependencies and uploading local files with scp to efs
+
+_Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens becaus wie `scp` recursivly_
 
 ```yaml
 #standard configuration
@@ -204,10 +208,12 @@ aws_region: eu-central-1 # the aws region where the efs is running
 
 # upload files with scp to efs
 file_dir: local_dir # extra local directory for file upload like ML models
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
 ```
 
 ### Only uploading local files with scp to efs
+
+_Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens becaus wie `scp` recursivly_
 
 ```yaml
 #standard configuration
@@ -226,7 +232,7 @@ requirements: requirements.txt # path + file to requirements.txt which holds the
 
 # upload files with scp to efs
 file_dir: local_dir # extra local directory for file upload like ML models
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir
 ```
 
 # 🏗 <a name="examples"></a> Examples
@@ -249,23 +255,23 @@ efsync('efsync.yaml')
 
 ## <a name="cli"></a>CLI Parameteres
 
-| cli_short | cli_long            | default          | description                                                                                |
-| --------- | ------------------- | ---------------- | ------------------------------------------------------------------------------------------ |
-| -h        | --help              | -                | displays all commands                                                                      |
-| -r        | --requirements      | requirements.txt | path of your requirements.txt                                                              |
-| -cf       | --config_file       | -                | path of your efsync.yaml                                                                   |
-| -py       | --python_version    | 3.8              | Python version used to install dependencies                                                |
-| -epd      | --efs_pip_dir       | lib              | directory where the pip dependencies will be installed on efs                              |
-| -efi      | --efs_filesystem_id | -                | File System ID from the EFS filesystem                                                     |
-| -ce       | --clean_efs         | -                | Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading |
-| -fd       | --file_dir          | tmp              | directory where all other files will be placed                                             |
-| -fdoe     | --file_dir_on_ec2   | tmp              | name of the directory where your file from <file_dir> will be uploaded                     |
-| -ap       | --aws_profile       | efsync           | name of the used AWS profile                                                               |
-| -ar       | --aws_region        | eu-central-1     | aws region where the efs is running                                                        |
-| -sbd      | --subnet_Id         | -                | subnet id of the efs                                                                       |
-| -ekn      | --ec2_key_name      | -                | temporary key name for the ec2 instance                                                    |
-| -s3b      | --s3_bucket         | -                | s3 bucket name from where the files will be downloaded instance                            |
-| -s3k      | --s3_keyprefix      | -                | s3 keyprefix of the directory in s3. Files will be downloaded recursively                  |
+| cli_short | cli_long            | default          | description                                                                                                         |
+| --------- | ------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| -h        | --help              | -                | displays all commands                                                                                               |
+| -r        | --requirements      | requirements.txt | path of your requirements.txt                                                                                       |
+| -cf       | --config_file       | -                | path of your efsync.yaml                                                                                            |
+| -py       | --python_version    | 3.8              | Python version used to install dependencies                                                                         |
+| -epd      | --efs_pip_dir       | lib              | directory where the pip dependencies will be installed on efs                                                       |
+| -efi      | --efs_filesystem_id | -                | File System ID from the EFS filesystem                                                                              |
+| -ce       | --clean_efs         | -                | Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading                          |
+| -fd       | --file_dir          | tmp              | directory where all other files will be placed                                                                      |
+| -fdoe     | --file_dir_on_ec2   | tmp              | name of the directory where your file from <file_dir> will be uploaded, if you use scp it will it will be /file_dir |
+| -ap       | --aws_profile       | efsync           | name of the used AWS profile                                                                                        |
+| -ar       | --aws_region        | eu-central-1     | aws region where the efs is running                                                                                 |
+| -sbd      | --subnet_Id         | -                | subnet id of the efs                                                                                                |
+| -ekn      | --ec2_key_name      | -                | temporary key name for the ec2 instance                                                                             |
+| -s3b      | --s3_bucket         | -                | s3 bucket name from where the files will be downloaded instance                                                     |
+| -s3k      | --s3_keyprefix      | -                | s3 keyprefix of the directory in s3. Files will be downloaded recursively                                           |
 
 # <a name="connect"></a> 🔗 Connect with me
 
