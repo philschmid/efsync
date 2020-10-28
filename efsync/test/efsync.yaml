@@ -13,10 +13,10 @@ aws_region: eu-central-1 # the aws region where the efs is running
 # requirements: requirements.txt # path + file to requirements.txt which holds the installable pip packages
 
 # s3 config
-s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
-s3_keyprefix: distilbert # s3 keyprefix for the files
-file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
-
-# # upload files with scp to efs
-# file_dir: local_dir # extra local directory for file upload like ML models
+# s3_bucket: efsync-test-bucket # s3 bucket name from files should be downloaded
+# s3_keyprefix: distilbert # s3 keyprefix for the files
 # file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded
+
+# upload files with scp to efs
+file_dir: examples/scp_data # extra local directory for file upload like ML models
+file_dir_on_ec2: ml # name of the directory where your file from <file_dir> will be uploaded

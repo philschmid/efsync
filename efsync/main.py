@@ -63,8 +63,8 @@ def efsync(input_args):
         # copy all files with scp from local directory to ec2 mounted efs
         #
         #
-        if 'file_dir' in config and 'ec2_file_dir' in config:
-            logger.info(f"coping files from {config['file_dir']} to /home/ec2-user/efs/{config['ec2_file_dir']} ")
+        if 'file_dir' in config and 'file_dir_on_ec2' in config:
+            logger.info(f"coping files from {config['file_dir']} to /home/ec2-user/efs/{config['file_dir_on_ec2']} ")
             copy_files_to_ec2(config)        
         #
         # stopping and deleting every ressource
@@ -87,4 +87,13 @@ def efsync(input_args):
         return True
     except Exception as e:
         err = repr(e)
+        logger.error(err)
+        try:
+            if 'instance_id' in config:
+                terminate_ec2_instance(bt3=config['bt3'], instance_id=config['instance_id'])
+            delete_iam_profile(config)
+            delete_ssh_key(config['bt3'], config['key']['name'])
+            delete_secruity_group(config['bt3'], config['security_group'])
+        except Exception as e:
+            raise(e)
         raise(err)
