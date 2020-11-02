@@ -45,7 +45,7 @@ efsync('efsync.yaml')
 
 # ⚙️ <a name="sdk"></a> Configurations
 
-There are 4 different ways to use efysnc in your project. You can create a `yaml` configuration and use the SDK, you can create a python `dict` and use the SDK, you can create a `yaml` configuration and use the CLI, or you can use the CLI with parameters. Below you can find examples for each of these. I also included afterwards configuration examples for the different use cases.
+There are 4 different ways to use efsync in your project. You can create a `yaml` configuration and use the SDK, you can create a python `dict` and use the SDK, you can create a `yaml` configuration and use the CLI, or you can use the CLI with parameters. Below you can find examples for each of these. I also included afterwards configuration examples for the different use cases.
 
 _Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens becaus wie `scp` recursivly_
 
@@ -88,7 +88,7 @@ efsync  --efs_filesystem_id  fs-2adfas123 \
         --subnet_Id subnet-xxx \
         --ec2_key_name efsync-asd913fjgq3 \
         --clean_efs all \
-        --aws_profile efysnc \
+        --aws_profile efsync \
         --aws_region yo-region-1 \
         --efs_pip_dir lib \
         --python_version 3.8 \
@@ -113,7 +113,7 @@ config = {
   'subnet_Id': 'subnet-xxx', # subnet of which the efs is running in
   'ec2_key_name':'efsync-asd913fjgq3',  # required key name for starting the ec2 instance
   'clean_efs': 'all', # Defines if the EFS should be cleaned up before. values: `'all'`,`'pip'`,`'file'` uploading
-  'aws_profile': 'efysnc', # aws iam profile with required permission configured in .aws/credentials
+  'aws_profile': 'efsync', # aws iam profile with required permission configured in .aws/credentials
   'aws_region': 'eu-central-1', # the aws region where the efs is running
   'efs_pip_dir': 'lib',  # pip directory on ec2
   'python_version': 3.8,  # python version used for installing pip dependencies -> should be used as lambda runtime afterwads
