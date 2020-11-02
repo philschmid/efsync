@@ -1,6 +1,6 @@
 # 🚀 efsync - Open-Source MLOps tool for running serverless machine learning
 
-[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing) ![pypi package deployment](https://github.com/philschmid/efsync/workflows/pypi%20package%20deployment/badge.svg) [![PyPI version](https://badge.fury.io/py/efsync.svg)](https://badge.fury.io/py/efsync)
+[![Downloads](https://pepy.tech/badge/efsync)](https://pepy.tech/project/efsync) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/efsync/blob/main/examples/efsync_pip_packages_and_s3_files.ipynb) ![pypi package deployment](https://github.com/philschmid/efsync/workflows/pypi%20package%20deployment/badge.svg) [![PyPI version](https://badge.fury.io/py/efsync.svg)](https://badge.fury.io/py/efsync)
 
 efsync is an CLI/SDK tool, which automatically syncs files and dependencies to AWS EFS. The CLI is easy to use, you only need access to an AWS Account, an AWS EFS-filesystem up and running. I wrote an article with an complete walkthrough. you can check this one out [here](https://www.philschmid.de/) or simply start with the [Quick Start](#quick-start). Efsync enables you to install dependencies with the AWS Lambda runtime directly into your EFS filesystem and use them in your AWS Lambda function. It enables you either combine this with syncing files from S3 or uploading them with SCP. You can also sync files from S3 and upload with SCP without installing Pip dependencies.
 
@@ -19,7 +19,7 @@ i created several examples for every usecase.
 
 # 🏃🏻‍♂️ <a name="quick-start"></a>Quick Start
 
-Example in Google Colab. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1G4LTw7aW5CBlFHVeiR12r5_49Z_CcEIo?usp=sharing)
+Example in Google Colab. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/efsync/blob/main/examples/efsync_pip_packages_and_s3_files.ipynb)
 
 1. **Install via pip3**
 
