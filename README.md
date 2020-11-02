@@ -47,7 +47,7 @@ efsync('efsync.yaml')
 
 There are 4 different ways to use efsync in your project. You can create a `yaml` configuration and use the SDK, you can create a python `dict` and use the SDK, you can create a `yaml` configuration and use the CLI, or you can use the CLI with parameters. Below you can find examples for each of these. I also included afterwards configuration examples for the different use cases.
 
-_Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens becaus wie `scp` recursivly_
+_Note: If you sync file with scp from local directory (e.g. model/bert) to efs (my_efs_model) efsync will sync the model to (my_efs_model/bert) that happens because scp uploads the files recursively._
 
 ## Configuration with yaml file `efsync.yaml`
 
