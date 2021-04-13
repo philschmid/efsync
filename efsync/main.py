@@ -17,7 +17,6 @@ import argparse
 
 logger = get_logger()
 
-
 def efsync(input_args):
     try:
         start = time.time()
