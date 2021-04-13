@@ -1,11 +1,11 @@
 import boto3
 
 
-def create_secruity_group(bt3=None):
+def create_secruity_group(bt3=None, vpc_id=None):
     try:
         ec2 = bt3.client('ec2')
         sec_group = ec2.create_security_group(
-            GroupName='efsync-group', Description='efsync-group sec group')
+            GroupName='efsync-group', Description='efsync-group sec group', VpcId=vpc_id)
         ec2.authorize_security_group_ingress(GroupId=sec_group['GroupId'],
                                              IpProtocol="tcp",
                                              CidrIp="0.0.0.0/0",
@@ -19,12 +19,13 @@ def create_secruity_group(bt3=None):
             raise(e)
 
 
-def get_security_group_id(bt3=None, group_name='efsync-group'):
+def get_security_group_id(bt3=None, group_name='efsync-group', vpc_id=None):
     try:
         ec2 = bt3.client('ec2')
         response = ec2.describe_security_groups(
             Filters=[
-                dict(Name='group-name', Values=[group_name])
+                dict(Name='group-name', Values=[group_name]),
+                dict(Name='vpc-id', Values=[vpc_id])
             ]
         )
         group_id = response['SecurityGroups'][0]['GroupId']
