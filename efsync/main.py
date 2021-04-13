@@ -7,6 +7,7 @@ from efsync.utils.security_group.ec2_security_group import create_secruity_group
 from efsync.utils.ec2.ec2_main import create_ec2_instance, terminate_ec2_instance
 from efsync.utils.iam_profile.iam_profile import delete_iam_profile
 from efsync.utils.ssh.scp_to_ec2 import copy_files_to_ec2
+from efsync.utils.ssh.vpc import get_vpc_id
 
 from efsync.utils.config.load_config import load_config
 
@@ -27,11 +28,19 @@ def efsync(input_args):
         logger.info('loading config')
         config = load_config(input_args)
         #
+        # getting vpc_id
+        #
+        logger.info('getting vpc id')
+        try:
+            config['vpc_id'] = get_vpc_id(config['bt3'], config['subnet_Id'])
+        except Exception as e:
+            raise(e)
+        #
         # creates security_group
         #
         logger.info(f"creating security group")
         try:
-            config['security_group'] = create_secruity_group(config['bt3'])
+            config['security_group'] = create_secruity_group(config['bt3'], config['vpc_id'])
         except Exception as e:
             raise(e)
         # 
@@ -39,7 +48,7 @@ def efsync(input_args):
         #
         logger.info(f"loading default security group")
         try:
-            config['default_sec_id'] = get_security_group_id(config['bt3'], 'default')
+            config['default_sec_id'] = get_security_group_id(config['bt3'], 'default', config['vpc_id'])
         except Exception as e:
             raise(e)
         
