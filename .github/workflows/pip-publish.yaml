@@ -2,8 +2,8 @@ name: pypi package deployment
 
 on:
   push:
-    paths:
-      - efsync/**
+    #paths:
+    #  - efsync/**
     branches: [main]
 
 jobs:
