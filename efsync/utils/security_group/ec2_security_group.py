@@ -34,14 +34,13 @@ def get_security_group_id(bt3=None, group_name='efsync-group', vpc_id=None):
         raise(e)
 
 
-def delete_secruity_group(bt3=None, group_id=''):
+def delete_secruity_group(bt3=None, group_id='', group_name='efsync-group'):
     try:
         ec2 = bt3.client('ec2')
         if len(group_id) > 0:
-            sec_group = ec2.delete_security_group(GroupId=group_id,
-                                                  GroupName='efsync-group')
+            sec_group = ec2.delete_security_group(GroupId=group_id)
         else:
-            sec_group = ec2.delete_security_group(GroupName='efsync-group')
+            sec_group = ec2.delete_security_group(GroupName=group_name)
         return True
     except Exception as e:
         print(repr(e))

@@ -7,6 +7,21 @@ from efsync.utils.ec2.custom_waiter import custom_waiter
 
 import time
 
+def get_latest_ami(bt3=None):
+    '''
+    Get latest AMI for Amazon Linux2 x86 64 gp2 in any region
+    '''
+    try:
+        ssm = bt3.client('ssm')
+        latest_ami = ssm.get_parameter(
+            Name='/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2',
+            WithDecryption=False
+        )
+        return latest_ami['Parameter']['Value']
+    except Exception as e:
+        print(repr(e))
+        raise(e)
+
 
 def create_ec2_instance(config: dict = None):
     try:
@@ -28,17 +43,23 @@ def create_ec2_instance(config: dict = None):
                     },
                 },
             ],
-            ImageId='ami-00edb93a4d68784e3',
+            ImageId=get_latest_ami(config['bt3']),      # can get latest ami from ssm parameters
             MinCount=1,
             MaxCount=1,
             InstanceType='t2.micro',
             UserData=user_data,
-            SecurityGroupIds=[
-                config['security_group'],
-                config['default_sec_id'],
-
+            NetworkInterfaces=[         # this works even when auto-assign public IP in the subnet is False
+                {
+                    'DeviceIndex': 0,
+                    'AssociatePublicIpAddress': True,
+                    'DeleteOnTermination': True,
+                    'Groups': [
+                        config['security_group'],
+                        config['default_sec_id'],
+                    ],
+                    'SubnetId': config['subnet_Id'],
+                },
             ],
-            SubnetId=config['subnet_Id'],
             KeyName=config['key']['name'],
             IamInstanceProfile={'Arn': instance_profile['Arn']})
         # waits till it running

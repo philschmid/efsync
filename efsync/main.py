@@ -7,7 +7,7 @@ from efsync.utils.security_group.ec2_security_group import create_secruity_group
 from efsync.utils.ec2.ec2_main import create_ec2_instance, terminate_ec2_instance
 from efsync.utils.iam_profile.iam_profile import delete_iam_profile
 from efsync.utils.ssh.scp_to_ec2 import copy_files_to_ec2
-from efsync.utils.ssh.vpc import get_vpc_id
+from efsync.utils.vpc.vpc import get_vpc_id
 
 from efsync.utils.config.load_config import load_config
 

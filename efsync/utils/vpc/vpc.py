@@ -1,6 +1,6 @@
 import boto3
 
-def get_vpc_id(bt3=None, subnet_id):
+def get_vpc_id(bt3=None, subnet_id=None):
     try:
         ec2 = bt3.client('ec2')
         response = ec2.describe_subnets(
